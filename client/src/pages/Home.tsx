@@ -146,8 +146,8 @@ export default function Home() {
                 <div className="absolute -bottom-5 h-10 w-10 rounded-full bg-white/20 blur-lg" />
               </div>
               <div>
-                <div className="font-display text-lg font-bold tracking-tight">Drive<span className="text-orange-400">Flow</span></div>
-                <div className="text-[11px] text-white/35">مساحة عملك، بشكل أذكى</div>
+                <div className="font-display text-lg font-bold tracking-tight">ملفات <span className="text-orange-400">خلود</span></div>
+                <div className="text-[11px] text-white/35">دورة AI — مساحة تعلمك</div>
               </div>
               <button onClick={() => setMenuOpen(false)} className="mr-auto rounded-lg p-1 text-white/35 hover:bg-white/5 lg:hidden"><X className="h-5 w-5" /></button>
             </div>
