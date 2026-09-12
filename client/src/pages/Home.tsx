@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import {
   Archive,
   ArrowDownToLine,
+  BrainCircuit,
   ChevronDown,
   ChevronLeft,
   Clock3,
@@ -71,6 +72,12 @@ const nav = [
   { label: "المهملات", icon: Trash2 },
 ];
 
+const lessonSummaries = [
+  { id: 1, lesson: "الدرس 01", title: "مدخل إلى الذكاء الاصطناعي", summary: "المفاهيم الأساسية، الفرق بين AI وML، وكيف تتعلم الآلة من البيانات.", duration: "18 دقيقة", type: "PDF", accent: "orange" },
+  { id: 2, lesson: "الدرس 02", title: "هندسة الأوامر باحتراف", summary: "قواعد كتابة Prompts دقيقة للحصول على نتائج أوضح من النماذج الذكية.", duration: "24 دقيقة", type: "DOCX", accent: "red" },
+  { id: 3, lesson: "الدرس 03", title: "أدوات الإنتاجية بالـ AI", summary: "تطبيقات عملية لتلخيص المستندات، توليد الأفكار، وتنظيم المعرفة.", duration: "31 دقيقة", type: "ملخص", accent: "amber" },
+];
+
 const iconColors: Record<string, string> = {
   coral: "text-orange-300",
   red: "text-red-400",
@@ -91,6 +98,12 @@ const surfaceColors: Record<string, string> = {
   amber: "bg-amber-400/[0.11]",
   violet: "bg-violet-400/[0.11]",
   pink: "bg-pink-400/[0.11]",
+};
+
+const lessonBadgeColors: Record<string, string> = {
+  orange: "bg-orange-400/15 text-orange-300",
+  red: "bg-red-400/15 text-red-300",
+  amber: "bg-amber-400/15 text-amber-300",
 };
 
 function FileIcon({ type, color = "orange" }: { type: FileType; color?: string }) {
@@ -117,6 +130,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [driveConnected, setDriveConnected] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
+  const [previewLesson, setPreviewLesson] = useState<(typeof lessonSummaries)[number] | null>(null);
   const [notice, setNotice] = useState("");
 
   const filteredFiles = useMemo(() => filterDriveItems(files, query), [query]);
@@ -197,6 +211,8 @@ export default function Home() {
 
             <section className="mb-8 grid gap-3 sm:grid-cols-3"><div className="stat-card"><div className="flex items-center justify-between"><span>إجمالي الملفات</span><File className="h-4 w-4 text-orange-300" /></div><div className="mt-3 text-2xl font-semibold">{formatStat("128")}</div><div className="mt-1 text-xs text-emerald-300/80">+12% <span className="text-white/30">من الشهر الماضي</span></div></div><div className="stat-card"><div className="flex items-center justify-between"><span>المشاركة معي</span><Share2 className="h-4 w-4 text-orange-300" /></div><div className="mt-3 text-2xl font-semibold">{formatStat("12")}</div><div className="mt-1 text-xs text-white/30">من 6 أشخاص</div></div><div className="stat-card"><div className="flex items-center justify-between"><span>المساحة المستخدمة</span><CloudDownload className="h-4 w-4 text-orange-300" /></div><div className="mt-3 text-2xl font-semibold">{formatStat("68.4 GB")}</div><div className="mt-1 text-xs text-white/30">68% من المساحة الكلية</div></div></section>
 
+            <section className="mb-9 rounded-2xl border border-orange-400/15 bg-gradient-to-br from-orange-500/[0.10] via-red-500/[0.035] to-transparent p-4 md:p-5"><div className="mb-4 flex items-center justify-between"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-xl bg-orange-400/15 text-orange-300"><BrainCircuit className="h-5 w-5" /></div><div><h2 className="font-display text-base font-semibold">ملخصات دورة الذكاء الاصطناعي</h2><p className="mt-1 text-xs text-white/40">مراجعة سريعة لأهم المفاهيم قبل متابعة الدرس التالي</p></div></div><button onClick={() => notify("تم فتح مكتبة دورة AI")} className="hidden rounded-lg px-3 py-2 text-xs text-orange-300 hover:bg-orange-400/10 sm:block">عرض كل الملخصات <ChevronLeft className="mr-1 inline h-3 w-3" /></button></div><div className="grid gap-3 md:grid-cols-3">{lessonSummaries.map((lesson) => <button key={lesson.id} onClick={() => setPreviewLesson(lesson)} className="group rounded-xl border border-white/[0.07] bg-[#160f0e]/75 p-4 text-right transition hover:-translate-y-0.5 hover:border-orange-300/35 hover:bg-white/[0.05]"><div className="mb-4 flex items-center justify-between"><span className={`rounded-md px-2 py-1 text-[10px] font-semibold ${lessonBadgeColors[lesson.accent]}`}>{lesson.lesson}</span><span className="flex items-center gap-1 text-[10px] text-white/35"><FileText className="h-3 w-3" />{lesson.type}</span></div><h3 className="text-sm font-semibold text-white/85 group-hover:text-orange-200">{lesson.title}</h3><p className="mt-2 line-clamp-2 text-xs leading-5 text-white/40">{lesson.summary}</p><div className="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3 text-[10px] text-white/30"><span>{lesson.duration}</span><span className="text-orange-300/80">معاينة سريعة <ChevronLeft className="mr-1 inline h-3 w-3" /></span></div></button>)}</div></section>
+
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div className="flex items-center gap-4"><div className="flex items-center gap-1.5 text-sm font-medium"><FolderOpen className="h-4 w-4 text-orange-400" />الملفات الأخيرة</div><span className="text-xs text-white/25">{filteredFiles.length} عنصر</span></div><div className="flex items-center gap-2"><button onClick={() => notify("تم فتح خيارات الترتيب")} className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs text-white/55 hover:bg-white/5">آخر تعديل <ChevronDown className="h-3.5 w-3.5" /></button><div className="flex rounded-lg border border-white/10 bg-white/[0.025] p-0.5"><button onClick={() => setView("list")} className={`rounded-md p-1.5 ${view === "list" ? "bg-white/10 text-orange-300" : "text-white/35"}`}><List className="h-4 w-4" /></button><button onClick={() => setView("grid")} className={`rounded-md p-1.5 ${view === "grid" ? "bg-white/10 text-orange-300" : "text-white/35"}`}><Grid2X2 className="h-4 w-4" /></button></div><button onClick={() => notify("إنشاء مجلد جديد")} className="rounded-lg border border-white/10 p-2 text-white/50 hover:bg-white/5 hover:text-orange-300"><Plus className="h-4 w-4" /></button></div></div>
 
             {selected.length > 0 && <div className="mb-3 flex items-center gap-3 rounded-xl border border-orange-400/20 bg-orange-400/[0.08] px-4 py-2.5 text-xs text-orange-100"><span>تم تحديد {selected.length} عناصر</span><div className="mr-auto flex gap-1"><button onClick={() => notify("تم تنزيل العناصر المحددة")} className="rounded-lg p-2 hover:bg-white/10"><ArrowDownToLine className="h-4 w-4" /></button><button onClick={() => notify("تم نسخ رابط المشاركة")} className="rounded-lg p-2 hover:bg-white/10"><Copy className="h-4 w-4" /></button><button onClick={() => setSelected([])} className="rounded-lg p-2 hover:bg-white/10"><X className="h-4 w-4" /></button></div></div>}
@@ -211,6 +227,7 @@ export default function Home() {
       </div>
 
       {showUpload && <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-5 backdrop-blur-sm"><div className="w-full max-w-md rounded-3xl border border-orange-300/20 bg-[#1b1110] p-6 shadow-2xl shadow-black/50"><div className="mb-5 flex items-center justify-between"><div><h2 className="font-display text-xl font-semibold">رفع ملف جديد</h2><p className="mt-1 text-xs text-white/40">أضف ملفًا إلى Google Drive الخاص بك</p></div><button onClick={() => setShowUpload(false)} className="rounded-xl p-2 text-white/40 hover:bg-white/5"><X className="h-5 w-5" /></button></div><div onClick={() => notify("اختيار الملفات سيكون متاحًا عند ربط Drive API")} className="grid cursor-pointer place-items-center rounded-2xl border border-dashed border-orange-400/25 bg-orange-400/[0.05] py-12 transition hover:bg-orange-400/[0.09]"><UploadCloud className="mb-3 h-8 w-8 text-orange-300" /><span className="text-sm font-medium">اسحب الملفات هنا أو اختر من جهازك</span><span className="mt-2 text-xs text-white/30">PDF, DOCX, XLSX, JPG حتى 2GB</span></div><div className="mt-5 flex gap-2"><button onClick={() => setShowUpload(false)} className="flex-1 rounded-xl border border-white/10 py-3 text-sm text-white/55 hover:bg-white/5">إلغاء</button><button onClick={() => { setShowUpload(false); notify("تم تجهيز نافذة الرفع"); }} className="flex-1 rounded-xl bg-gradient-to-l from-[#ff7045] to-[#e83d34] py-3 text-sm font-semibold">متابعة</button></div></div></div>}
+      {previewLesson && <div className="fixed inset-0 z-50 grid place-items-center bg-black/65 p-5 backdrop-blur-sm"><div className="w-full max-w-lg rounded-3xl border border-orange-300/20 bg-[#1b1110] p-6 shadow-2xl shadow-black/50"><div className="mb-5 flex items-start justify-between"><div><span className="rounded-md bg-orange-400/15 px-2 py-1 text-[10px] font-semibold text-orange-300">{previewLesson.lesson} · {previewLesson.type}</span><h2 className="mt-4 font-display text-xl font-semibold">{previewLesson.title}</h2><p className="mt-2 text-xs text-white/40">معاينة سريعة لملف الملخص</p></div><button onClick={() => setPreviewLesson(null)} className="rounded-xl p-2 text-white/40 hover:bg-white/5"><X className="h-5 w-5" /></button></div><div className="rounded-2xl border border-white/[0.07] bg-white/[0.035] p-5"><div className="mb-3 flex items-center gap-2 text-sm font-semibold text-orange-100"><BrainCircuit className="h-4 w-4 text-orange-300" />الفكرة الرئيسية</div><p className="text-sm leading-7 text-white/65">{previewLesson.summary} هذا الملخص مرتب على شكل نقاط عملية تساعدك على تثبيت المعرفة والعودة إلى أهم الأفكار بسرعة.</p><div className="mt-5 flex items-center gap-2 text-xs text-white/35"><Clock3 className="h-3.5 w-3.5" />مدة القراءة المتوقعة: {previewLesson.duration}</div></div><div className="mt-5 flex gap-2"><button onClick={() => { setPreviewLesson(null); notify("تم فتح الملف للقراءة"); }} className="flex-1 rounded-xl bg-gradient-to-l from-[#ff7045] to-[#e83d34] py-3 text-sm font-semibold">فتح الملف</button><button onClick={() => setPreviewLesson(null)} className="flex-1 rounded-xl border border-white/10 py-3 text-sm text-white/55 hover:bg-white/5">إغلاق</button></div></div></div>}
       {notice && <div className="fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-orange-300/20 bg-[#2a1713] px-4 py-3 text-sm text-orange-100 shadow-2xl shadow-black/30">{notice}</div>}
     </div>
   );
